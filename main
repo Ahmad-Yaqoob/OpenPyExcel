@@ -1,0 +1,27 @@
+import openpyxl
+import requests
+import os
+path = "D:\\Infogistic\\Python worksheets\\Test.xlsx"
+# loading Excel sheet
+wb = openpyxl.load_workbook(path.strip())
+# loading active sheet
+sheet = wb.active
+
+# Getting URL
+url = sheet.cell(row=2, column=1)
+url_value = url.value
+
+# Getting access to Result cell
+result = sheet.cell(row=2, column=3)
+code = sheet.cell(row=2, column=4)
+
+# Hitting API
+response = requests.get(url_value)
+if response.status_code == 200:
+    result.value = "Pass"
+    code.value = response.status_code
+else:
+    result.value = "Fail"
+    code.value = response.status_code
+wb.save("D:\\Infogistic\\Python worksheets\\Results.xlsx")
+os.system('start excel.exe "D:\\Infogistic\\Python worksheets\\Results.xlsx"')
